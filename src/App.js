@@ -1,26 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import React, { Component } from "react";
+class TodoList extends Component {
+  constructor() {
+    super();
+    this.state = {
+      todos: [],
+      currentToDo: "",
+    };
+    this.handleChange = this.handleChange.bind(this)
+    this.addItem = this.addItem.bind(this)
+  }
+  handleChange = (event) => {
+    this.setState({
+      currentToDo: event.target.value,
+    });
+  };
+  addItem = (event) => {
+    event.preventDefault();
+    console.log("addItem Method fired!");
+    this.setState(prevState => {
+      const updatedTodos = prevState.todos.concat(this.state.currentToDo)
+      return {
+        todos: updatedTodos,
+        currentToDo: ''
+      }
+    })
+  };
+  render() {
+    const todoListElements = this.state.todos.map(td => <li key={this.state.todos.indexOf(td)}>{td}</li>)
+    return (
+      <div className="container">
+        <form onSubmit={this.addItem}>
+          <label htmlFor="taskname">Task Name:</label>
+          <input
+            onChange={this.handleChange}
+            name="taskName"
+            type="text"
+            value = {this.state.currentToDo}
+            placeholder="Add todo here!"
+          ></input>
+          <button type="submit">Add Task</button>
+          {/* <p>{this.state.handleChange}</p> */}
+        </form>
+        <ul>
+          {todoListElements}
+        </ul>
+      </div>
+    );
+  }
 }
-
-export default App;
+export default TodoList;
